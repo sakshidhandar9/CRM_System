@@ -1,0 +1,116 @@
+﻿@model CustomerRelationManagement.Models.Customer
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@* 
+<form asp-action="Create" method="post"> *@
+    <form asp-action="Create" method="post" class="customer-form">
+    <h2 class="enquiry-heading">Enquiry Form</h2>
+
+    <div class="form-group">
+        <label asp-for="CustomerName"></label>
+        <input asp-for="CustomerName" class="form-control" />
+        <span asp-validation-for="CustomerName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LocationId"></label>
+        <select asp-for="LocationId" class="form-control" asp-items="ViewBag.Locations">
+            <option value="">-- Select Location --</option>
+        </select>
+        <span asp-validation-for="LocationId" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label><strong>Budget Options</strong></label><br />
+        @foreach (var item in ViewBag.BudgetOptions as List<SelectListItem>)
+        {
+            <div class="form-check form-check-inline">
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="SelectedBudgetIds"
+                       value="@item.Value"
+                       id="budget_@item.Value" />
+                <label class="form-check-label" for="budget_@item.Value">@item.Text</label>
+            </div>
+        }
+    </div> 
+
+
+    <div class="form-group">
+        <label asp-for="PreferredLocationId"></label>
+        <select asp-for="PreferredLocationId" class="form-control" asp-items="ViewBag.PreferredLocations">
+            <option value="">-- Select Preferred Location --</option>
+        </select>
+        <span asp-validation-for="PreferredLocationId" class="text-danger"></span>
+    </div>
+
+
+
+    <div class="form-group">
+        <label for="BuilderId">Select Builder</label>
+        <select id="BuilderId" name="BuilderId" class="form-control">
+            <option value="">-- Select Builder --</option>
+            @foreach (var builder in ViewBag.Builders as List<SelectListItem>)
+            {
+                <option value="@builder.Value">@builder.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ProjectId">Select Project</label>
+        <select id="ProjectId" name="ProjectId" class="form-control">
+            <option value="">-- Select Project --</option>
+        </select>
+    </div>
+
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+
+    <input type="submit" value="Save" class="btn btn-primary" />
+</form>
+
+@section Scripts {
+   
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#BuilderId').change(function () {
+                var builderId = $(this).val();
+                $('#ProjectId').empty().append('<option>Loading...</option>');
+
+                $.ajax({
+                    url: '/Customer/GetProjectsByBuilderId',
+                    type: 'GET',
+                    data: { builderId: builderId },
+                    success: function (data) {
+                        var projectDropdown = $('#ProjectId');
+                        projectDropdown.empty();
+                        projectDropdown.append('<option value="">-- Select Project --</option>');
+                        $.each(data, function (i, project) {
+                            projectDropdown.append('<option value="' + project.value + '">' + project.text + '</option>');
+                        });
+                    },
+                    error: function () {
+                        alert('Error retrieving project list.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+

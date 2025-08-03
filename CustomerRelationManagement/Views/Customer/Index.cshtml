@@ -1,0 +1,27 @@
+﻿@model List<CustomerRelationManagement.Models.CustomerViewModel>
+
+<div class="table-container">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Location</th>
+            <th>Preferred Location</th>
+            <th>Builder</th>
+            <th>Project</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.CustomerName</td>
+                <td>@c.LocationName</td>
+                <td>@c.PreferredLocationName</td>
+                <td>@c.BuilderName</td>
+                <td>@c.ProjectName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
