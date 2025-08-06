@@ -1,6 +1,6 @@
 # CRM Management System
 
-A complete Customer Relationship Management (CRM) system developed using **ASP.NET MVC** and **SQL Server**. This application helps businesses manage customer data, track interactions, automate sales, and improve customer service.
+A complete Customer Relationship Management (CRM) system developed using **ASP.NET Core MVC** and **SQL Server**. This application helps businesses manage customer data, track interactions, automate sales, and improve customer service.
 
 ## 🚀 Features
 
